@@ -12,14 +12,10 @@ const userSchema = new mongoose.Schema({
     name: {
         type: String
     },
-    rollNumber: {
-        type: String,
-        unique: true
-    },
-    events: {
+    events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
-    }
+    }]
 })
 
 const Users = mongoose.model('Users', userSchema)

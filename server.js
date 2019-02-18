@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const bodyParser = require('body-parser')
 
 // Import Routes and Keys
 const authRoutes = require('./routes/routes.auth')
