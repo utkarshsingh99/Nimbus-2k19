@@ -5,6 +5,10 @@ const eventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    organizedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Teams'
+    },
     date: {
         type: Date
     },

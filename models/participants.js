@@ -12,7 +12,7 @@ const partipantSchema = new mongoose.Schema({
     members: {
         type: [
             {
-            userId: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Users'
             }
         ]
