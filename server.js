@@ -17,8 +17,16 @@ mongoose.connect(keys.mongo.url, {useNewUrlParser: true, useCreateIndex: true}, 
 
 var app = express()
 
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+
 app.use('/auth', authRoutes)
 app.use('/events', eventRoutes)
+
+
+app.get('/', (req, res) => {
+    res.send('Site Working')
+})
 
 const port = process.env.PORT || 3000
 

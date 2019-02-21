@@ -2,10 +2,13 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
     rollNumber: {
-        type: String,
+        type: String
+    },
+    mobile: {
+        type: Number,
         required: true
     },
-    firebase_id: {
+    authId: {
         type: String,
         required: true
     },
