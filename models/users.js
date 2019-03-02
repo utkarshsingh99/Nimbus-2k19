@@ -18,7 +18,13 @@ const userSchema = new mongoose.Schema({
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
-    }]
+    }],
+    branch: {
+        type: String
+    },
+    year: {
+        type: Number
+        }
 })
 
 const Users = mongoose.model('Users', userSchema)

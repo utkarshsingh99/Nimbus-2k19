@@ -8,10 +8,10 @@ const eventRoutes = require('./routes/routes.events')
 const keys = require('./keys')
 
 // Import DB Models
-const Users = require('./models/users')
-const Events = require('./models/events')
-const Participants = require('./models/participants')
-const Teams = require('./models/teams')
+const {Users} = require('./models/users')
+const {Events} = require('./models/events')
+const {Participants} = require('./models/participants')
+const {Teams} = require('./models/teams')
 
 mongoose.connect(keys.mongo.url, {useNewUrlParser: true, useCreateIndex: true}, () => console.log('DB Connected'))
 
@@ -26,6 +26,19 @@ app.use('/events', eventRoutes)
 
 app.get('/', (req, res) => {
     res.send('Site Working')
+})
+
+app.get('/departments', (req, res) => {
+    Teams.find({}).then(teams => {
+        res.send(teams)
+    })
+})
+
+app.post('/departments', (req, res) => {
+    Teams.findById(req.body.clubId)
+        .then(team => {
+            res.send(team)
+        })
 })
 
 const port = process.env.PORT || 3000

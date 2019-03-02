@@ -7,7 +7,11 @@ const teamSchema = new mongoose.Schema({
     },
     convener: {
         type: String
-    }
+    },
+    events: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Events'
+    }]
 })
 
 const Teams = mongoose.model('Teams', teamSchema)
