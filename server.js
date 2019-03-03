@@ -37,10 +37,21 @@ app.get('/departments', (req, res) => {
 app.post('/departments', (req, res) => {
     Teams.findById(req.body.clubId)
         .then(team => {
-            res.send(team)
-        })
+            // Replace EventIDs with actual event details
+            var noOfEvents = team.events.length
+            team.events.forEach((eventId, index) => {
+                Events.findById(eventId)
+                    .then(event => {
+                        console.log(event)
+                        team.events[index] = event 
+                        if(index === team.events.length - 1) {
+                            res.send(team)
+                        }
+                    })
+            })
+        }).catch(e => res.send('Club Not Found'))
 })
 
 const port = process.env.PORT || 3000
 
-app.listen(port, () => console.log('Port Up'))
+app.listen(port, '100.112.162.158', () => console.log('Port Up'))

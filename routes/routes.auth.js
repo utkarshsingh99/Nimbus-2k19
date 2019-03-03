@@ -9,7 +9,6 @@ router.post('/signup', (req, res) => {
     
     Users.findOne({ mobile: req.body.mobile })
         .then(user => {
-            console.log('FindOne function')
             if(user === null) {
                 // If Mobile Number doesn't exist, make a new user
                 var newUser = new Users({mobile: req.body.mobile, authId: req.body.firebase_id})

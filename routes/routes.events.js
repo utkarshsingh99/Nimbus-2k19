@@ -12,10 +12,11 @@ router.post('/teamsinfo', (req, res) => {
             if(event) {
                 // Find all participants of the Event
                 Participants.find({event: req.body.eventId}).then(participants => {
-                    event.members = participants                        // Add them to the members array
+                    console.log(participants)
+                    event["members"] = participants                                     // Add them to the members array  
+                    console.log(event)
+                    res.send(event)  
                 }) 
-                console.log(event)
-                res.send(event)
             } else {
                 res.send(404)           // Event Not Found
             }
@@ -25,6 +26,16 @@ router.post('/teamsinfo', (req, res) => {
 router.post('/newteam', (req, res) => {
     
     // Save New Team in Participant Collection
+    Users.findOne({authId: req.headers.token})
+        .then(user => {
+            if(user === null) {
+                res.send('User Not Found')
+            } else {
+                // Add user to req.body.members
+                req.body['members'] = [{name: user.name, authId}]
+            }
+        })
+
     var newteam = new Participants(req.body)
     newteam.save().then(team => console.log('Team Saved: ', team))
 
@@ -37,9 +48,17 @@ router.post('/jointeam', (req, res) => {
         .then(team => {
             if(req.body.password === team.password) {
                 // TODO: Add Member to array of the team
-                res.send(200)
+                Users.findOne({authId: req.headers.token})
+                    .then(user => {
+                        if(user) {
+                            team['members'].push(user)
+                            res.send(200)
+                        } else {
+                            res.send('User not authorized')
+                        }
+                    })
             } else {
-                res.send(501)
+                res.send('Passwords do not match')
             }
         })
 })
