@@ -52,6 +52,29 @@ app.post('/departments', (req, res) => {
         }).catch(e => res.send('Club Not Found'))
 })
 
+// Below Code is for build phase ONLY
+app.get('/teams', (req, res) => {
+    Teams.find({})
+        .then(teams => {
+            res.send(teams)
+        })
+})
+
+app.get('/participants', (req, res) => {
+    Participants.find({})
+        .then(participants => {
+            res.send(participants)
+        })
+})
+
+app.get('/users', (req, res) => {
+    Users.find({})
+        .then(users => {
+            res.send(users)
+        })
+})
+// Delete Above Code while launching 
+
 const port = process.env.PORT || 3000
 
-app.listen(port, '100.112.162.158', () => console.log('Port Up'))
+app.listen(port, () => console.log('Port Up'))

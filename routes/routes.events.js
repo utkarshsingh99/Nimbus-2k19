@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { Events } = require('../models/events')
 const { Participants } = require('../models/participants')
+const { Users } = require('../models/users')
 
 router.get('/', (req, res) => {
     Events.find({}).then(data => res.send(data))
@@ -32,13 +33,16 @@ router.post('/newteam', (req, res) => {
                 res.send('User Not Found')
             } else {
                 // Add user to req.body.members
-                req.body['members'] = [{name: user.name, authId}]
+                req.body['members'] = [{_id: user._id}]
             }
+            var newteam = new Participants(req.body)
+            newteam.save().then(team => {
+                console.log('Team Saved')
+                res.send(team)
+            })
         })
 
-    var newteam = new Participants(req.body)
-    newteam.save().then(team => console.log('Team Saved: ', team))
-
+    
     // Save New Team in the Events Collection
         // On Hold. Don't really think that's necessary
 })
@@ -51,7 +55,7 @@ router.post('/jointeam', (req, res) => {
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
                         if(user) {
-                            team['members'].push(user)
+                            team['members'].push(user._id)
                             res.send(200)
                         } else {
                             res.send('User not authorized')
