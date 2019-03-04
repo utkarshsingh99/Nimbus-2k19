@@ -5,7 +5,7 @@ const teamSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    convener: {
+    logo: {
         type: String
     },
     events: [{

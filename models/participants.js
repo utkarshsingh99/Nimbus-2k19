@@ -13,14 +13,19 @@ const partipantSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
     },
-    members: {
-        type: [
-            {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Users'
+    members: [
+        {
+            name: {
+                type: String
+            },
+            rollNumber: {
+                type: String
+            },
+            user_id: {
+                type: String
             }
-        ]
-    }
+        }
+    ]
 })
 
 const Participants = mongoose.model('Participants', partipantSchema)

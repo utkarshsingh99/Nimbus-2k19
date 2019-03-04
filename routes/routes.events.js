@@ -55,7 +55,7 @@ router.post('/jointeam', (req, res) => {
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
                         if(user) {
-                            team['members'].push(user._id)
+                            team['members'].push({name: user.name, rollNumber: user.rollNumber, user_id: user._id})         //
                             res.send(200)
                         } else {
                             res.send('User not authorized')
