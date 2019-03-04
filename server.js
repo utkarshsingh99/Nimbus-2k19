@@ -77,8 +77,5 @@ app.get('/users', (req, res) => {
 
 const port = process.env.PORT || 3000
 
-<<<<<<< HEAD
 app.listen(port, () => console.log('Port Up'))
-=======
-app.listen(port, () => console.log('Port Up'))
->>>>>>> 2d2fb6e5e9338372bb6d4028e569757ee84cc78f
+
