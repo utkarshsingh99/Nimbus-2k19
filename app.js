@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 // Import Routes and Keys
 const authRoutes = require('./routes/routes.auth')
 const eventRoutes = require('./routes/routes.events')
+const quizRoutes = require('./routes/routes.quiz')
 const keys = require('./keys')
 
 // Import DB Models
@@ -22,6 +23,7 @@ app.use(bodyParser.json())
 
 app.use('/auth', authRoutes)
 app.use('/events', eventRoutes)
+app.use('/quiz', quizRoutes)
 
 
 app.get('/', (req, res) => {

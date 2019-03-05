@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { Quiz } = require('../models/quiz')
+const { Questions } = require('../models/questions')
 
 // ONLY FOR DEVELOPMENT
 router.get('/', (req, res) => {
@@ -20,7 +20,8 @@ router.get('/', (req, res) => {
 // }
 
 router.post('/postquestions', (req, res) => {
-    var doc = new Quiz(req.body)
+    console.log('Post request for Questions')
+    var doc = new Questions(req.body)
     doc.save().then(doc => {
         res.send(doc)
     })
@@ -30,3 +31,5 @@ router.post('/postquestions', (req, res) => {
 router.post('/questions', (req, res) => {
     
 })
+
+module.exports = router
