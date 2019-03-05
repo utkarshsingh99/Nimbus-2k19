@@ -12,11 +12,25 @@ router.post('/teamsinfo', (req, res) => {
         .then(event => {
             if(event) {
                 // Find all participants of the Event
-                Participants.find({event: req.body.eventId}).then(participants => {
-                    console.log(participants)
-                    event["members"] = participants                                     // Add them to the members array  
-                    console.log(event)
-                    res.send(event)  
+                Participants.find({}).then(participants => {
+                    // console.log(participants)
+                    participants.forEach((participant, index) => {
+                        participant.members.forEach((member, index) =>{
+                            console.log(member)
+                            Users.findById(member.user_id)
+                                .then(user => {
+                                    console.log(user.name)
+                                    if(user === null) {
+                                        res.send('Member does not exist')
+                                    } 
+                                    participant.members[index] = {name: user.name, rollNumber: user.rollNumber}
+                                    
+                                    if(index === participant.members.length - 1) {
+                                        res.send(participants)  
+                                    }
+                                })
+                        }) 
+                    })
                 }) 
             } else {
                 res.send(404)           // Event Not Found
@@ -33,7 +47,7 @@ router.post('/newteam', (req, res) => {
                 res.send('User Not Found')
             } else {
                 // Add user to req.body.members
-                req.body['members'] = [{_id: user._id}]
+                req.body['members'] = [{user_id: user._id}]
             }
             var newteam = new Participants(req.body)
             newteam.save().then(team => {
@@ -55,7 +69,7 @@ router.post('/jointeam', (req, res) => {
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
                         if(user) {
-                            team['members'].push({name: user.name, rollNumber: user.rollNumber, user_id: user._id})         //
+                            team['members'].push({user_id: user._id})         
                             res.send(200)
                         } else {
                             res.send('User not authorized')

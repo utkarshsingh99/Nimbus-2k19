@@ -15,12 +15,6 @@ const partipantSchema = new mongoose.Schema({
     },
     members: [
         {
-            name: {
-                type: String
-            },
-            rollNumber: {
-                type: String
-            },
             user_id: {
                 type: String
             }
