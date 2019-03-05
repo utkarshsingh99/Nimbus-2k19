@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const questionSchema = new mongoose.Schema({
-    eventId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Events'
+    quizId: {
+        type: String
     },
     question: {
         type: String,
