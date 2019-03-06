@@ -8,34 +8,27 @@ router.get('/', (req, res) => {
 })
 
 router.post('/teamsinfo', (req, res) => {
-    Events.findById(req.body.eventId)
-        .then(event => {
-            if(event) {
-                // Find all participants of the Event
-                Participants.find({}).then(participants => {
-                    // console.log(participants)
-                    participants.forEach((participant, index) => {
-                        participant.members.forEach((member, index) =>{
-                            console.log(member)
-                            Users.findById(member.user_id)
-                                .then(user => {
-                                    console.log(user.name)
-                                    if(user === null) {
-                                        res.send('Member does not exist')
-                                    } 
-                                    participant.members[index] = {name: user.name, rollNumber: user.rollNumber}
+    // Find all participants of the Event
+    Participants.find({event: req.body.eventId}).then(participants => {
+        // For Each team, fetch & display member name and roll Number
+        participants.forEach((participant, pindex) => {
+            participant.members.forEach((member, index) => {
+                // Fetch Member from user_id
+                Users.findById(member.user_id)
+                    .then(user => {
+                        // Replacing user_id in members array with name and rollNumber
+                        if(user === null) {                     // Just basic API protection
+                            res.send('Member does not exist')
+                        } 
+                        participant.members[index] = {name: user.name, rollNumber: user.rollNumber}
                                     
-                                    if(index === participant.members.length - 1) {
-                                        res.send(participants)  
-                                    }
-                                })
-                        }) 
+                        if(pindex === participants.length - 1 && index === participant.members.length - 1) {
+                            res.send(participants)  
+                        }
                     })
-                }) 
-            } else {
-                res.send(404)           // Event Not Found
-            }
+            }) 
         })
+    }) 
 })
 
 router.post('/newteam', (req, res) => {
@@ -55,7 +48,6 @@ router.post('/newteam', (req, res) => {
                 res.send(team)
             })
         })
-
     
     // Save New Team in the Events Collection
         // On Hold. Don't really think that's necessary

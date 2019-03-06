@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
     rollNumber: {
-        type: String
+        type: String,
+        default: ""
     },
     mobile: {
         type: Number,
@@ -13,18 +14,21 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     name: {
-        type: String
+        type: String,
+        default: ""
     },
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
     }],
     branch: {
-        type: String
+        type: String,
+        default: ""
     },
     year: {
-        type: String
-        }
+        type: String,
+        default: ""
+    }
 })
 
 const Users = mongoose.model('Users', userSchema)

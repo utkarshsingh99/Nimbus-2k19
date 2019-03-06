@@ -55,13 +55,6 @@ app.post('/departments', (req, res) => {
 })
 
 // Below Code is for build phase ONLY
-app.get('/teams', (req, res) => {
-    Teams.find({})
-        .then(teams => {
-            res.send(teams)
-        })
-})
-
 app.get('/participants', (req, res) => {
     Participants.find({})
         .then(participants => {
