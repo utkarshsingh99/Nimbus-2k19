@@ -1,10 +1,11 @@
 const router = require('express').Router()
 
 const { Questions } = require('../models/questions')
+const { Quiz } = require('../models/quiz')
 
 // ONLY FOR DEVELOPMENT
 router.get('/', (req, res) => {
-    Questions.find({})
+    Quiz.find({})
         .then(questions => {
             res.send(questions)
         })

@@ -21,9 +21,16 @@ router.post('/teamsinfo', (req, res) => {
                             res.send('Member does not exist')
                         } 
                         participant.members[index] = {name: user.name, rollNumber: user.rollNumber}
+
+                        if(index === participant.members.length - 1) {
+                            console.log(participant.members)
+                        }
                                     
-                        if(pindex === participants.length - 1 && index === participant.members.length - 1) {
-                            res.send(participants)  
+                        // if(pindex === participants.length - 1 && index === participant.members.length - 1) {
+                        //     res.send(participants)  
+                        // }
+                        if (pindex === participants.length - 1 && index === participant.members.length - 1) {
+                            res.send(participants)
                         }
                     })
             }) 

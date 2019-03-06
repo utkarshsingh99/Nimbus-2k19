@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 const questionSchema = new mongoose.Schema({
     quizId: {
-        type: String
+        type: String,
+        required: true
     },
     question: {
         type: String,
