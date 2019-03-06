@@ -31,29 +31,28 @@ router.post('/teamsinfo', (req, res) => {
     }) 
 })
 
-router.post('/newteam', (req, res) => {
-    
+router.post('/newteam', (req, res) => {    
     // Save New Team in Participant Collection
     Users.findOne({authId: req.headers.token})
         .then(user => {
             if(user === null) {
                 res.send('User Not Found')
             } else {
-                // Add user to req.body.members
+                // Add user to req.body.members, since currently s/he is only member in team
                 req.body['members'] = [{user_id: user._id}]
             }
             var newteam = new Participants(req.body)
             newteam.save().then(team => {
-                console.log('Team Saved')
                 res.send(team)
             })
         })
 })
 
 router.post('/jointeam', (req, res) => {
+    // Finds the teamId
     Participants.findById(req.body.teamId)
         .then(team => {
-            if(req.body.password === team.password) {
+            if(req.body.password === team.password) {                   // Checks if password matches with the stored team password
                 // TODO: Add Member to array of the team
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
