@@ -24,7 +24,7 @@ router.post('/postquestions', (req, res) => {
     var doc = new Questions(req.body)
     console.log(doc)
     doc.save().then(doc => {
-        res.send(doc)
+        res.send('OK')
     })
 })
 // DELETE ABOVE CODE WHEN GOING INTO PRODUCTION

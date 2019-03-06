@@ -57,8 +57,12 @@ router.post('/jointeam', (req, res) => {
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
                         if(user) {
-                            team['members'].push({user_id: user._id})         
-                            res.send(200)
+                            if(team.members.indexOf(user._id) === -1) {             // To check if user doesn't already exist in team
+                                team['members'].push({user_id: user._id})         
+                                res.send(200)
+                            } else {
+                                res.send('User already exists in team')         
+                            }
                         } else {
                             res.send('User not authorized')
                         }
