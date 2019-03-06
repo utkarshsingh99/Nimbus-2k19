@@ -9,7 +9,7 @@ const partipantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    event: {
+    eventId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
     },

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 
 router.post('/teamsinfo', (req, res) => {
     // Find all participants of the Event
-    Participants.find({event: req.body.eventId}).then(participants => {
+    Participants.find({eventId: req.body.eventId}).then(participants => {
         // For Each team, fetch & display member name and roll Number
         participants.forEach((participant, pindex) => {
             participant.members.forEach((member, index) => {
@@ -48,9 +48,6 @@ router.post('/newteam', (req, res) => {
                 res.send(team)
             })
         })
-    
-    // Save New Team in the Events Collection
-        // On Hold. Don't really think that's necessary
 })
 
 router.post('/jointeam', (req, res) => {
