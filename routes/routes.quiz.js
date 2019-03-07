@@ -1,4 +1,5 @@
 const router = require('express').Router()
+var _ = require('lodash');
 
 const { Questions } = require('../models/questions')
 const { quiz } = require('../models/quiz')
@@ -48,19 +49,13 @@ router.post('/questions', (req, res) => {
     let questionsList = []
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
-            questions.forEach((question, index) => { 
-                question1 = {question: question.question, 
-                            _id: question._id,
-                            option1: question.option1,
-                            option2: question.option2,
-                            option3: question.option3,
-                            option4: question.option4}
-                questionsList.push(question1)
-                if(index === questions.length - 1) {
-                    // console.log(questions)
-                    res.send(questionsList)
-                }
-            })
+            var randomNum = generateRandomNumbers(questions.length)
+            console.log(randomNum)
+            for(var i = 0; i < 10; i ++) {
+                var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
+                questionsList.push(question)
+            }
+            res.send(questionsList)
         })
 })
 
@@ -88,3 +83,13 @@ module.exports = router
 //     "quizName": "App Team",
 //         "organizedBy": "App Team NITH"
 // }
+
+function generateRandomNumbers(length) {
+    var arr = []
+    while (arr.length < 11) {
+        var r = Math.floor(Math.random() * length) + 1
+        if (arr.indexOf(r) === -1) 
+            arr.push(r)
+    }
+    return arr
+}
