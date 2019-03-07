@@ -11,10 +11,10 @@ router.post('/teamsinfo', (req, res) => {
     // Find all participants of the Event
     Participants.find({eventId: req.body.eventId}).then(participants => {
         // For Each team, fetch & display member name and roll Number
-        participants.forEach((participant, pindex) => {
-            participant.members.forEach((member, index) => {
+        participants.map((participant) => {
+            return participant.members.map((member) => {
                 // Fetch Member from user_id
-                Users.findById(member.user_id)
+                return Users.findById(member.user_id)
                     .then(user => {
                         // Replacing user_id in members array with name and rollNumber
                         if(user === null) {                     // Just basic API protection
@@ -29,11 +29,14 @@ router.post('/teamsinfo', (req, res) => {
                         // if(pindex === participants.length - 1 && index === participant.members.length - 1) {
                         //     res.send(participants)  
                         // }
-                        if (pindex === participants.length - 1 && index === participant.members.length - 1) {
-                            res.send(participants)
-                        }
+                        // if (pindex === participants.length - 1 && index === participant.members.length - 1) {
+                        //     res.send(participants)
+                        // }
                     })
             }) 
+        }).then(participants => {
+            console.log(participants)
+            res.send(participants)
         })
     }) 
 })

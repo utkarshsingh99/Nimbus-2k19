@@ -1,15 +1,28 @@
 const router = require('express').Router()
 
 const { Questions } = require('../models/questions')
-const { Quiz } = require('../models/quiz')
+const { quiz } = require('../models/quiz')
 
 // ONLY FOR DEVELOPMENT
+
 router.get('/', (req, res) => {
-    Quiz.find({})
-        .then(questions => {
-            res.send(questions)
+    quiz.find({})
+        .then(quiz => {
+            res.send(quiz)
         })
 })
+
+router.post('/postquiz', (req, res) => {
+    var quiz1 = new quiz(req.body)
+    quiz1.save().then(ret => res.send(ret))
+})
+
+// router.get('/', (req, res) => {
+//     Quiz.find({})
+//         .then(quizzes => {
+//             res.send(quizzes)
+//         })
+// })
 
 // {
 //     question: 'Some question',
@@ -67,3 +80,11 @@ router.post('/answers', (req, res) => {
     })
 })
 module.exports = router
+
+// {
+//     "_id": {
+//         "$oid": "5c7ec33efb6fc072012e8aef"
+//     },
+//     "quizName": "App Team",
+//         "organizedBy": "App Team NITH"
+// }

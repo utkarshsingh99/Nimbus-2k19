@@ -13,6 +13,7 @@ const { Users } = require('./models/users')
 const { Events } = require('./models/events')
 const { Participants } = require('./models/participants')
 const { Teams } = require('./models/teams')
+const { Quiz } = require('./models/quiz')
 
 mongoose.connect(keys.mongo.url, { useNewUrlParser: true, useCreateIndex: true }, () => console.log('DB Connected'))
 

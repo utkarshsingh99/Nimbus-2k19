@@ -11,6 +11,6 @@ const quizSchema = new mongoose.Schema({
 
 // TODO: Need to add fields for leaderboard scores
 
-const Quiz = mongoose.model('Quiz', quizSchema)
+const quiz = mongoose.model('quiz', quizSchema)
 
-module.exports = { Quiz }
+module.exports = { quiz }
