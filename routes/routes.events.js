@@ -11,33 +11,7 @@ router.post('/teamsinfo', (req, res) => {
     // Find all participants of the Event
     Participants.find({eventId: req.body.eventId}).then(participants => {
         // For Each team, fetch & display member name and roll Number
-        participants.map((participant) => {
-            return participant.members.map((member) => {
-                // Fetch Member from user_id
-                return Users.findById(member.user_id)
-                    .then(user => {
-                        // Replacing user_id in members array with name and rollNumber
-                        if(user === null) {                     // Just basic API protection
-                            res.send('Member does not exist')
-                        } 
-                        participant.members[index] = {name: user.name, rollNumber: user.rollNumber}
-
-                        if(index === participant.members.length - 1) {
-                            console.log(participant.members)
-                        }
-                                    
-                        // if(pindex === participants.length - 1 && index === participant.members.length - 1) {
-                        //     res.send(participants)  
-                        // }
-                        // if (pindex === participants.length - 1 && index === participant.members.length - 1) {
-                        //     res.send(participants)
-                        // }
-                    })
-            }) 
-        }).then(participants => {
-            console.log(participants)
-            res.send(participants)
-        })
+        res.send(participants)
     }) 
 })
 
@@ -49,7 +23,7 @@ router.post('/newteam', (req, res) => {
                 res.send('User Not Found')
             } else {
                 // Add user to req.body.members, since currently s/he is only member in team
-                req.body['members'] = [{user_id: user._id}]
+                req.body['members'] = [{name: user.name, rollNumber: user.rollNumber}]
             }
             var newteam = new Participants(req.body)
             newteam.save().then(team => {
@@ -68,7 +42,7 @@ router.post('/jointeam', (req, res) => {
                     .then(user => {
                         if(user) {
                             if(team.members.indexOf(user._id) === -1) {             // To check if user doesn't already exist in team
-                                team['members'].push({user_id: user._id})         
+                                team['members'].push({name: user.name, rollNumber: user.rollNumber})         
                                 res.send(200)
                             } else {
                                 res.send('User already exists in team')         
