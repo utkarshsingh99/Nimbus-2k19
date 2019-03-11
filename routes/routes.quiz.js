@@ -3,6 +3,7 @@ var _ = require('lodash');
 
 const { Questions } = require('../models/questions')
 const { quiz } = require('../models/quiz')
+const { Users } = require('../models/users')
 
 // ONLY FOR DEVELOPMENT
 
@@ -62,17 +63,22 @@ router.post('/questions', (req, res) => {
 router.post('/answers', (req, res) => {
     var correct = 0;
     var answers = req.body.answers
-    answers.forEach((answer, index) => {
-        Questions.findById(answer.questionId)
-            .then(question => {
-                if(question.answer == answer) {
-                    correct++;
-                }
-                if(index === answers.length - 1) {
-                    res.send({correct})
-                }
+    Users.findOne({authId: req.headers.token})
+        .then(user => {
+            answers.forEach((answer, index) => {
+                Questions.findById(answer.questionId)
+                .then(question => {
+                    if(question.answer == answer) {
+                        correct++;
+                    }
+                    if(index === answers.length - 1) {
+                        console.log(question.quizId)
+                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
+                            .then(() => res.send({ correct }))
+                    }
+                })
             })
-    })
+        })
 })
 
 module.exports = router
@@ -94,3 +100,14 @@ function generateRandomNumbers(length) {
     }
     return arr
 }
+
+// {
+//    quizId 
+// }
+router.post('/leaderboard', (req, res) => {
+    quiz.findById(quizId)
+        .then(quizInfo => {
+            console.log(quizInfo)
+            res.send(quizInfo.users)
+        })
+})

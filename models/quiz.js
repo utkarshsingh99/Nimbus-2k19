@@ -6,7 +6,14 @@ const quizSchema = new mongoose.Schema({
     },
     organizedBy: {
         type: String
-    }
+    },
+    users: [
+        {
+            name: String,
+            rollNumber: String,
+            score: Number
+        }
+    ]
 })
 
 // TODO: Need to add fields for leaderboard scores
