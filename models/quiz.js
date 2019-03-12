@@ -9,8 +9,14 @@ const quizSchema = new mongoose.Schema({
     },
     users: [
         {
-            name: String,
-            rollNumber: String,
+            name: {
+                type: String,
+                required: true  
+            },
+            rollNumber: {
+                type: String,
+                required: true
+            },
             score: Number
         }
     ]

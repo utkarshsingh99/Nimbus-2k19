@@ -14,6 +14,11 @@ router.get('/', (req, res) => {
         })
 })
 
+router.get('/questions', (req, res) => {
+    Questions.find({})
+        .then(questions => res.send(questions))
+})
+
 router.post('/postquiz', (req, res) => {
     var quiz1 = new quiz(req.body)
     quiz1.save().then(ret => res.send(ret))
