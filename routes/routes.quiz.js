@@ -110,7 +110,7 @@ function generateRandomNumbers(length) {
 //    quizId 
 // }
 router.post('/leaderboard', (req, res) => {
-    quiz.findById(quizId)
+    quiz.findById(req.body.quizId)
         .then(quizInfo => {
             console.log(quizInfo)
             res.send(quizInfo.users)
