@@ -53,38 +53,75 @@ router.post('/postquestions', (req, res) => {
 router.post('/questions', (req, res) => {
     // Code to check if user has already played the quiz needs to be added
     let questionsList = []
+    console.log('Request Made')
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
+            // console.log(questions)
             var randomNum = generateRandomNumbers(questions.length)
             console.log(randomNum)
             for(var i = 0; i < 10; i ++) {
                 var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
-                questionsList.push(question)
+                questionsList.push(question) 
             }
-            res.send(questionsList)
+            quiz.findOne({ _id: req.body.quizId })
+                .then(quiz => {
+                    Users.findOne({authId: req.headers.token})
+                        .then(user => {
+                            // Check if user exists in users array of quiz
+                            var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
+                            if (member === undefined) {
+                                // User has not played quiz before 
+                                res.send(questionsList)
+                            } else {
+                                res.send('User has already played')
+                            }
+                        })
+                })
         })
 })
 
 router.post('/answers', (req, res) => {
-    var correct = 0;
+    var correct = 0, counter = 0;
     var answers = req.body.answers
     Users.findOne({authId: req.headers.token})
         .then(user => {
             answers.forEach((answer, index) => {
                 Questions.findById(answer.questionId)
-                .then(question => {
-                    console.log(question.answer, answer.answer)
-                    if(question.answer == answer.answer) {
-                        correct++;
-                    }
-                    if(index === answers.length - 1) {
-                        console.log(correct)
-                        console.log(question.quizId)
-                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
-                            .then(() => res.send({ correct }))
-                    }
-                })
+                    .then(question => {
+                        // console.log(question.answer, answer.answer)
+                        if(question.answer == answer.answer) {
+                            correct++;
+                        }
+                        counter++;
+                        console.log('counter:', counter)
+                        if(counter === 9) {
+                            console.log(correct)
+                            console.log(question.quizId)
+                            quiz.findOne({_id: req.body.quizId})
+                                .then(foundQuiz => {
+                                    // Check if user exists in users array of quiz
+                                    var member = foundQuiz.users.find(member => member.rollNumber === user.rollNumber)
+                                    if(member === undefined) {
+                                        // User has not played quiz before
+                                        console.log('User not found in quiz array') 
+                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
+                                            .then((quiz) => res.send({ correct }))
+                                    } else {
+                                        res.send('User has already played')
+                                    }
+                                })
+                            
+                        }
+                    })
+                // return Questions.findById(answer.questionId);
             })
+            // Promise.all(promises).then(questions => {
+            //     questions.forEach((question, index) => {
+            //         if(question.answer === answer[index]) {
+
+            //         }
+            //     })
+            // });
         })
 })
 
