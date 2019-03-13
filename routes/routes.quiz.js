@@ -73,10 +73,12 @@ router.post('/answers', (req, res) => {
             answers.forEach((answer, index) => {
                 Questions.findById(answer.questionId)
                 .then(question => {
-                    if(question.answer == answer) {
+                    console.log(question.answer, answer.answer)
+                    if(question.answer == answer.answer) {
                         correct++;
                     }
                     if(index === answers.length - 1) {
+                        console.log(correct)
                         console.log(question.quizId)
                         quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
                             .then(() => res.send({ correct }))
@@ -84,6 +86,10 @@ router.post('/answers', (req, res) => {
                 })
             })
         })
+})
+
+router.get('/testuser', (req, res) => {
+    quiz.findById
 })
 
 module.exports = router
