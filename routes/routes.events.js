@@ -25,15 +25,18 @@ router.post('/newteam', (req, res) => {
                 // Add user to req.body.members, since currently s/he is only member in team
                 req.body['members'] = [{name: user.name, rollNumber: user.rollNumber}]
             }
-            Participants.find({eventId: req.body.eventId, members: {name: user.name, rollNumber: user.rollNumber}})
-                .then(participant => {
-                    if(!participant) {
+            // Participants.findOne({eventId: req.body.eventId})
+            //     .then(participant => {
+            //         console.log(participant)
+            //         if(!participant) {
                         var newteam = new Participants(req.body)
                         newteam.save().then(team => {
                             res.send(team)
                         })
-                    }
-                })
+                //     } else {
+                //         res.send('Member is already in a team')
+                //     }
+                // })
         })
 })
 
@@ -53,7 +56,6 @@ router.post('/jointeam', (req, res) => {
                             res.send('Passwords do not match')
                         }
                     })
-                
             } else {
                 res.send('User not authorized')
             }
