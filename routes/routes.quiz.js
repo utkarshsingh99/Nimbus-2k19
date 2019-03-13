@@ -88,9 +88,9 @@ router.post('/answers', (req, res) => {
         })
 })
 
-router.get('/testuser', (req, res) => {
-    quiz.findById
-})
+// router.get('/testuser', (req, res) => {
+//     quiz.findById
+// })
 
 module.exports = router
 

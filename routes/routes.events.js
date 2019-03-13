@@ -47,7 +47,7 @@ router.post('/jointeam', (req, res) => {
                 Users.findOne({authId: req.headers.token})
                     .then(user => {
                         if(user) {
-                            if(team.members.find(member => member.rollNumber === user.rollNumber)) {             // To check if user doesn't already exist in team
+                            if(!team.members.find(member => member.rollNumber === user.rollNumber)) {             // To check if user doesn't already exist in team
                                 team['members'].push({name: user.name, rollNumber: user.rollNumber})
                                 res.send(200)
                             } else {
