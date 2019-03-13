@@ -39,28 +39,27 @@ router.post('/newteam', (req, res) => {
 
 router.post('/jointeam', (req, res) => {
     // Finds the teamId
-    Participants.findById(req.body.teamId)
-        .then(team => {
-            console.log(req.body.password, team.password)
-            if(req.body.password === team.password) {                   // Checks if password matches with the stored team password
-                // TODO: Add Member to array of the team
-                Users.findOne({authId: req.headers.token})
-                    .then(user => {
-                        if(user) {
-                            if(!team.members.find(member => member.rollNumber === user.rollNumber)) {             // To check if user doesn't already exist in team
-                                team['members'].push({name: user.name, rollNumber: user.rollNumber})
-                                res.send(200)
-                            } else {
-                                res.send('User already exists in team')
-                            }
+    Users.findOne({ authId: req.headers.token })
+        .then(user => {
+            if (user) {
+                Participants.findById(req.body.teamId)
+                    .then(team => {
+                        console.log(req.body.password, team.password)
+                        if (req.body.password === team.password) {                   // Checks if password matches with the stored team password
+                            // TODO: Add Member to array of the team
+                            Participants.findByIdAndUpdate(req.body.teamId, { $push: { members: { name: user.name, rollNumber: user.rollNumber } } })
+                                .then(() => res.send(200))
                         } else {
-                            res.send('User not authorized')
+                            res.send('Passwords do not match')
                         }
                     })
+                
             } else {
-                res.send('Passwords do not match')
+                res.send('User not authorized')
             }
         })
+
+    
 })
 
 module.exports = router
