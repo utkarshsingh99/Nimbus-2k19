@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const bodyParser = require('body-parser')
+var cors = require('cors')
 
 // Import Routes and Keys
 const authRoutes = require('./routes/routes.auth')
@@ -19,6 +20,7 @@ mongoose.connect(keys.mongo.url, { useNewUrlParser: true, useCreateIndex: true }
 
 var app = express()
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
