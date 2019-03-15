@@ -1,23 +1,25 @@
 const router = require('express').Router()
 var _ = require('lodash')
+var cron = require('node-cron')
 
 const { Questions } = require('../models/questions')
 const { quiz } = require('../models/quiz')
 const { Users } = require('../models/users')
 
 // ONLY FOR DEVELOPMENT
+// setInterval(function () {
+//     // quiz.findOneAndUpdate({}, )
+// }, 86400)
 
-
-router.get('/', (req, res) => {
+cron.schedule('0 3 * * *', () => {
     quiz.find({})
-        .then(quiz => {
-            res.send(quiz)
+        .then((quizzes) => {               // Get all the documents in the collection
+            quizzes.forEach((element, index) => {
+                console.log(element._id)
+                quiz.findByIdAndUpdate(element._id, { $set: { users: [] } })
+                    .then(final => console.log('Updated Quiz: ', final))
+            })
         })
-})
-
-router.get('/questions', (req, res) => {
-    Questions.find({})
-        .then(questions => res.send(questions))
 })
 
 router.post('/postquiz', (req, res) => {

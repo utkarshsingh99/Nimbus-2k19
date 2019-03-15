@@ -33,11 +33,11 @@ app.get('/', (req, res) => {
     res.send('Site Working')
 })
 
-app.get('/departments', (req, res) => {
-    Teams.find({}).then(teams => {
-        res.send(teams)
-    })
-})
+// app.get('/departments', (req, res) => {
+//     Teams.find({}).then(teams => {
+//         res.send(teams)
+//     })
+// })
 
 app.post('/departments', (req, res) => {
     Teams.findById(req.body.clubId)
@@ -58,19 +58,19 @@ app.post('/departments', (req, res) => {
 })
 
 // Below Code is for build phase ONLY
-app.get('/participants', (req, res) => {
-    Participants.find({})
-        .then(participants => {
-            res.send(participants)
-        })
-})
+// app.get('/participants', (req, res) => {
+//     Participants.find({})
+//         .then(participants => {
+//             res.send(participants)
+//         })
+// })
 
-app.get('/users', (req, res) => {
-    Users.find({})
-        .then(users => {
-            res.send(users)
-        })
-})
-// Delete Above Code while launching
+// app.get('/users', (req, res) => {
+//     Users.find({})
+//         .then(users => {
+//             res.send(users)
+//         })
+// })
+// Delete Above Code before launching
 
 module.exports = app;
