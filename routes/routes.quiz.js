@@ -1,11 +1,12 @@
 const router = require('express').Router()
-var _ = require('lodash');
+var _ = require('lodash')
 
 const { Questions } = require('../models/questions')
 const { quiz } = require('../models/quiz')
 const { Users } = require('../models/users')
 
 // ONLY FOR DEVELOPMENT
+
 
 router.get('/', (req, res) => {
     quiz.find({})
