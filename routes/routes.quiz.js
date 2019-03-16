@@ -27,12 +27,12 @@ router.post('/postquiz', (req, res) => {
     quiz1.save().then(ret => res.send(ret))
 })
 
-// router.get('/', (req, res) => {
-//     Quiz.find({})
-//         .then(quizzes => {
-//             res.send(quizzes)
-//         })
-// })
+router.get('/', (req, res) => {
+    quiz.find({})
+        .then(quizzes => {
+            res.send(quizzes)
+        })
+})
 
 // {
 //     question: 'Some question',
@@ -93,7 +93,7 @@ router.post('/answers', (req, res) => {
                     .then(question => {
                         // console.log(question.answer, answer.answer)
                         if(question.answer == answer.answer) {
-                            correct++;
+                            correct += 10 + answer.remainingTime
                         }
                         counter++;
                         console.log('counter:', counter)
