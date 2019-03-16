@@ -59,7 +59,8 @@ router.post('/questions', (req, res) => {
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
             // console.log(questions)
-            if(questions.length < 10) {
+            if(questions.length < 10) {                 // Last deadliest bug which made the server hang mysteriously
+                console.log([])
                 res.send([])
             }
             var randomNum = generateRandomNumbers(questions.length)
@@ -76,6 +77,7 @@ router.post('/questions', (req, res) => {
                             var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
                             if (member === undefined) {
                                 // User has not played quiz before 
+                                console.log('An array of questions like: ', questionsList[0])
                                 res.send(questionsList)
                             } else {
                                 res.send('User has already played')
@@ -100,8 +102,6 @@ router.post('/answers', (req, res) => {
                         counter++;
                         console.log('counter:', counter)
                         if(counter === 9) {
-                            console.log(correct)
-                            console.log(question.quizId)
                             quiz.findOne({_id: req.body.quizId})
                                 .then(foundQuiz => {
                                     // Check if user exists in users array of quiz
