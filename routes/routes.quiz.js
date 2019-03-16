@@ -62,28 +62,30 @@ router.post('/questions', (req, res) => {
             if(questions.length <= 10) {                 // Last deadliest bug which made the server hang mysteriously
                 console.log([])
                 res.send([])
-            }
-            var randomNum = generateRandomNumbers(questions.length)
-            console.log(randomNum)
-            for(var i = 0; i < 10; i ++) {
-                var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
-                questionsList.push(question) 
-            }
-            quiz.findOne({ _id: req.body.quizId })
+            } else {
+
+                var randomNum = generateRandomNumbers(questions.length)
+                console.log(randomNum)
+                for(var i = 0; i < 10; i ++) {
+                    var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
+                    questionsList.push(question) 
+                }
+                quiz.findOne({ _id: req.body.quizId })
                 .then(quiz => {
                     Users.findOne({authId: req.headers.token})
-                        .then(user => {
-                            // Check if user exists in users array of quiz
-                            var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
-                            if (member === undefined) {
-                                // User has not played quiz before 
-                                console.log('An array of questions like: ', questionsList[0])
-                                res.send(questionsList)
-                            } else {
-                                res.send('User has already played')
-                            }
-                        })
+                    .then(user => {
+                        // Check if user exists in users array of quiz
+                        var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
+                        if (member === undefined) {
+                            // User has not played quiz before 
+                            console.log('An array of questions like: ', questionsList[0])
+                            res.send(questionsList)
+                        } else {
+                            res.send('User has already played')
+                        }
+                    })
                 })
+            }
         })
 })
 
