@@ -59,7 +59,7 @@ router.post('/questions', (req, res) => {
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
             // console.log(questions)
-            if(questions.length < 10) {                 // Last deadliest bug which made the server hang mysteriously
+            if(questions.length <= 10) {                 // Last deadliest bug which made the server hang mysteriously
                 console.log([])
                 res.send([])
             }
