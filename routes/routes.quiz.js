@@ -10,6 +10,7 @@ const { Users } = require('../models/users')
 // setInterval(function () {
 //     // quiz.findOneAndUpdate({}, )
 // }, 86400)
+// DELETE ABOVE CODE WHEN GOING INTO PRODUCTION
 
 cron.schedule('0 3 * * *', () => {
     quiz.find({})
@@ -42,7 +43,6 @@ router.get('/', (req, res) => {
 //     option4: 'sdfd',
 //     answer: 4
 // }
-
 router.post('/postquestions', (req, res) => {
     console.log(req.body)
     var doc = new Questions(req.body)
@@ -51,7 +51,6 @@ router.post('/postquestions', (req, res) => {
         res.send('OK')
     })
 })
-// DELETE ABOVE CODE WHEN GOING INTO PRODUCTION
 
 router.post('/questions', (req, res) => {
     // Code to check if user has already played the quiz needs to be added
@@ -60,6 +59,9 @@ router.post('/questions', (req, res) => {
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
             // console.log(questions)
+            if(questions.length < 10) {
+                res.send([])
+            }
             var randomNum = generateRandomNumbers(questions.length)
             console.log(randomNum)
             for(var i = 0; i < 10; i ++) {
@@ -112,45 +114,12 @@ router.post('/answers', (req, res) => {
                                     } else {
                                         res.send('User has already played')
                                     }
-                                })
-                            
+                                })                            
                         }
                     })
-                // return Questions.findById(answer.questionId);
             })
-            // Promise.all(promises).then(questions => {
-            //     questions.forEach((question, index) => {
-            //         if(question.answer === answer[index]) {
-
-            //         }
-            //     })
-            // });
         })
 })
-
-// router.get('/testuser', (req, res) => {
-//     quiz.findById
-// })
-
-module.exports = router
-
-// {
-//     "_id": {
-//         "$oid": "5c7ec33efb6fc072012e8aef"
-//     },
-//     "quizName": "App Team",
-//         "organizedBy": "App Team NITH"
-// }
-
-function generateRandomNumbers(length) {
-    var arr = []
-    while (arr.length < 11) {
-        var r = Math.floor(Math.random() * length) + 1
-        if (arr.indexOf(r) === -1) 
-            arr.push(r)
-    }
-    return arr
-}
 
 // {
 //    quizId 
@@ -162,3 +131,15 @@ router.post('/leaderboard', (req, res) => {
             res.send(quizInfo.users)
         })
 })
+
+module.exports = router
+
+function generateRandomNumbers(length) {
+    var arr = []
+    while (arr.length < 11) {
+        var r = Math.floor(Math.random() * length) + 1
+        if (arr.indexOf(r) === -1) 
+            arr.push(r)
+    }
+    return arr
+}
