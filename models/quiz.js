@@ -11,13 +11,14 @@ const quizSchema = new mongoose.Schema({
         {
             name: {
                 type: String,
-                required: true  
+                required: true
             },
             rollNumber: {
                 type: String,
                 required: true
             },
-            score: Number
+            score: Number,
+            profilePicture : String
         }
     ]
 })
