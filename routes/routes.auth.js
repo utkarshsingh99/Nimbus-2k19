@@ -6,7 +6,7 @@ router.post('/signup', (req, res) => {
     // Will first check with firebase. Code to be added
 
     // Will check if User exists in DB
-    
+
     Users.findOne({ mobile: req.body.mobile })
         .then(user => {
             if(user === null) {
@@ -21,10 +21,16 @@ router.post('/signup', (req, res) => {
         }).catch(e => {
             console.log('Couldn\'t perform the findOne function')
             res.send('Error: ', e)
-        }) 
-              
-})
+        })
 
+})
+router.post('/photo',(req,res) => {
+console.log(req.headers.token)
+Users.find({authId : req.headers.token}).then( user => {
+res.send(user)
+console.log(user)
+})
+})
 router.post('/info', (req, res) => {
     // Check if any field is not filled
     console.log(req.headers.token)
@@ -33,7 +39,7 @@ router.post('/info', (req, res) => {
             if(user === null) {                   // Accidental request for an ID which doesn't exist
                 res.sendStatus(404)
             } else {
-                res.sendStatus(200)                  
+                res.sendStatus(200)
             }
         }).catch(e => res.send(e))
 })
@@ -52,7 +58,7 @@ router.get('/profile', (req, res) => {
             } else {
                 res.sendStatus(404)                 // If User not found, user = null
             }
-        }).catch(e => res.sendStatus(501))          
+        }).catch(e => res.sendStatus(501))
 })
 
 module.exports = router

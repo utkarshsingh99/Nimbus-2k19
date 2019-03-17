@@ -66,7 +66,7 @@ router.post('/questions', (req, res) => {
             console.log(randomNum)
             for(var i = 0; i < 10; i ++) {
                 var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
-                questionsList.push(question) 
+                questionsList.push(question)
             }
             quiz.findOne({ _id: req.body.quizId })
                 .then(quiz => {
@@ -75,7 +75,7 @@ router.post('/questions', (req, res) => {
                             // Check if user exists in users array of quiz
                             var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
                             if (member === undefined) {
-                                // User has not played quiz before 
+                                // User has not played quiz before
                                 res.send(questionsList)
                             } else {
                                 res.send('User has already played')
@@ -108,13 +108,13 @@ router.post('/answers', (req, res) => {
                                     var member = foundQuiz.users.find(member => member.rollNumber === user.rollNumber)
                                     if(member === undefined) {
                                         // User has not played quiz before
-                                        console.log('User not found in quiz array') 
-                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
+                                        console.log('User not found in quiz array')
+                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct,profilePicture : user.profilePicture}}})
                                             .then((quiz) => res.send({ correct }))
                                     } else {
                                         res.send('User has already played')
                                     }
-                                })                            
+                                })
                         }
                     })
             })
@@ -122,7 +122,7 @@ router.post('/answers', (req, res) => {
 })
 
 // {
-//    quizId 
+//    quizId
 // }
 router.post('/leaderboard', (req, res) => {
     quiz.findById(req.body.quizId)
@@ -138,7 +138,7 @@ function generateRandomNumbers(length) {
     var arr = []
     while (arr.length < 11) {
         var r = Math.floor(Math.random() * length) + 1
-        if (arr.indexOf(r) === -1) 
+        if (arr.indexOf(r) === -1)
             arr.push(r)
     }
     return arr
