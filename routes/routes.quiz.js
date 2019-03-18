@@ -6,19 +6,18 @@ const { Questions } = require('../models/questions')
 const { quiz } = require('../models/quiz')
 const { Users } = require('../models/users')
 
-// ONLY FOR DEVELOPMENT
-// setInterval(function () {
-//     // quiz.findOneAndUpdate({}, )
-// }, 86400)
-// DELETE ABOVE CODE WHEN GOING INTO PRODUCTION
-
+// CRON Scheduling to delete Users for the day
 cron.schedule('0 3 * * *', () => {
     quiz.find({})
         .then((quizzes) => {               // Get all the documents in the collection
             quizzes.forEach((element, index) => {
                 console.log(element._id)
-                quiz.findByIdAndUpdate(element._id, { $set: { users: [] } })
-                    .then(final => console.log('Updated Quiz: ', final))
+                var today = new Date().getDate()
+                quiz.findByIdAndUpdate(element._id, {$push: {pastUsers: {date: today, users: element.users}}})
+                    .then(updatedQuiz => {            
+                        quiz.findByIdAndUpdate(element._id, { $set: { users: [] } })
+                        .then(final => console.log('Updated Quiz: ', final))
+                    })
             })
         })
 })
@@ -38,7 +37,7 @@ router.get('/', (req, res) => {
 // {
 //     question: 'Some question',
 //     option1: 'dfgfg',
-//     option2: 'opgdf',
+//     option2: 'opgdf',String
 //     option3: 'vbfadbs',
 //     option4: 'sdfd',
 //     answer: 4
@@ -137,7 +136,7 @@ module.exports = router
 
 function generateRandomNumbers(length) {
     var arr = []
-    while (arr.length < 11) {
+    while (arr.length === 10) {
         var r = Math.floor(Math.random() * length) + 1
         if (arr.indexOf(r) === -1)
             arr.push(r)

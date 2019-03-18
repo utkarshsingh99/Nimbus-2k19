@@ -20,6 +20,29 @@ const quizSchema = new mongoose.Schema({
             score: Number,
             profilePicture : String
         }
+    ],
+    timeLimit: {
+        type: Number,
+        default: 15
+    },
+    pastUsers: [
+        {
+            date: String,
+            users: [
+                {
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    rollNumber: {
+                        type: String,
+                        required: true
+                    },
+                    score: Number,
+                    profilePicture: String
+                }
+            ]
+        }
     ]
 })
 
