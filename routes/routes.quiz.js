@@ -63,7 +63,6 @@ router.post('/questions', (req, res) => {
                 console.log([])
                 res.send([])
             } else {
-
                 var randomNum = generateRandomNumbers(questions.length)
                 console.log(randomNum)
                 for(var i = 0; i < 10; i ++) {
@@ -110,13 +109,13 @@ router.post('/answers', (req, res) => {
                                     var member = foundQuiz.users.find(member => member.rollNumber === user.rollNumber)
                                     if(member === undefined) {
                                         // User has not played quiz before
-                                        console.log('User not found in quiz array') 
-                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct}}})
+                                        console.log('User not found in quiz array')
+                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct,profilePicture : user.profilePicture}}})
                                             .then((quiz) => res.send({ correct }))
                                     } else {
                                         res.send('User has already played')
                                     }
-                                })                            
+                                })
                         }
                     })
             })
@@ -124,7 +123,7 @@ router.post('/answers', (req, res) => {
 })
 
 // {
-//    quizId 
+//    quizId
 // }
 router.post('/leaderboard', (req, res) => {
     quiz.findById(req.body.quizId)
@@ -140,7 +139,7 @@ function generateRandomNumbers(length) {
     var arr = []
     while (arr.length < 11) {
         var r = Math.floor(Math.random() * length) + 1
-        if (arr.indexOf(r) === -1) 
+        if (arr.indexOf(r) === -1)
             arr.push(r)
     }
     return arr

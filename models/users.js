@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     year: {
         type: String,
         default: ""
+    },
+    profilePicture : {
+      type : String,
+      default : ""
     }
 })
 
