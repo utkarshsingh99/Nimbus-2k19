@@ -14,7 +14,7 @@ cron.schedule('0 3 * * *', () => {
                 console.log(element._id)
                 var today = new Date().getDate()
                 quiz.findByIdAndUpdate(element._id, {$push: {pastUsers: {date: today, users: element.users}}})
-                    .then(updatedQuiz => {            
+                    .then(updatedQuiz => {
                         quiz.findByIdAndUpdate(element._id, { $set: { users: [] } })
                         .then(final => console.log('Updated Quiz: ', final))
                     })
@@ -57,16 +57,17 @@ router.post('/questions', (req, res) => {
     console.log('Request Made')
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
-            // console.log(questions)
-            if(questions.length <= 10) {                 // Last deadliest bug which made the server hang mysteriously
+            if(questions.length < 10) {                 // Last deadliest bug which made the server hang mysteriously
+              console.log(questions.length)
                 console.log([])
                 res.send([])
             } else {
                 var randomNum = generateRandomNumbers(questions.length)
-                console.log(randomNum)
+                randomNum = shuffle(questions)
+                // console.log(randomNum+992)
                 for(var i = 0; i < 10; i ++) {
-                    var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
-                    questionsList.push(question) 
+                    // var question = _.pick(questions[randomNum[i]], ["question", "option1", "option2", "option3", "option4", "_id"])
+                    questionsList.push(randomNum[i])
                 }
                 quiz.findOne({ _id: req.body.quizId })
                 .then(quiz => {
@@ -75,8 +76,8 @@ router.post('/questions', (req, res) => {
                         // Check if user exists in users array of quiz
                         var member = quiz.users.find(member => member.rollNumber === user.rollNumber)
                         if (member === undefined) {
-                            // User has not played quiz before 
-                            console.log('An array of questions like: ', questionsList[0])
+                            // User has not played quiz before
+                            console.log('An array of questions like: ', questionsList)
                             res.send(questionsList)
                         } else {
                             res.send('User has already played')
@@ -136,10 +137,29 @@ module.exports = router
 
 function generateRandomNumbers(length) {
     var arr = []
-    while (arr.length === 10) {
+    while (arr.length == 10) {
         var r = Math.floor(Math.random() * length) + 1
-        if (arr.indexOf(r) === -1)
+        if (arr.indexOf(r) == -1)
             arr.push(r)
     }
+    console.log(arr)
     return arr
+}
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
