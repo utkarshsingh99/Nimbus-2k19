@@ -25,6 +25,9 @@ const questionSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    picture: {
+        type: String
+    },
     answer: {
         type: Number,
         required: true
