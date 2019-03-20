@@ -115,8 +115,14 @@ router.post('/answers', (req, res) => {
                                     if(member === undefined) {
                                         // User has not played quiz before
                                         console.log('User not found in quiz array')
-                                        quiz.findOneAndUpdate({_id: question.quizId}, {$push: {users: {name: user.name, rollNumber: user.rollNumber, score: correct,profilePicture : user.profilePicture}}})
-                                            .then((quiz) => res.send({ correct }))
+                                        quiz.findOneAndUpdate({_id: question.quizId}, 
+                                                            {$push: 
+                                                                {users: {name: user.name, 
+                                                                        rollNumber: user.rollNumber, 
+                                                                        score: correct,
+                                                                        profilePicture : user.profilePicture}
+                                                                }
+                                                            }).then((quiz) => res.send({ correct }))
                                     } else {
                                         res.send('User has already played')
                                     }
