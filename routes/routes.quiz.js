@@ -12,7 +12,7 @@ cron.schedule('0 3 * * *', () => {
         .then((quizzes) => {               // Get all the documents in the collection
             quizzes.forEach((element, index) => {
                 console.log(element._id)
-                var today = new Date().getDate()
+                var today = new Date().getDate() - 1
                 quiz.findByIdAndUpdate(element._id, {$push: {pastUsers: {date: today, users: element.users}}})
                     .then(updatedQuiz => {            
                         quiz.findByIdAndUpdate(element._id, { $set: { users: [] } })
