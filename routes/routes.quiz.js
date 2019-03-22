@@ -62,7 +62,6 @@ router.post('/questions', (req, res) => {
     console.log('Request Made')
     Questions.find({quizId: req.body.quizId})                               // All questions with the particular quiz event
         .then(questions => {
-            // console.log(questions)
             if(questions.length <= 10) {                 // Last deadliest bug which made the server hang mysteriously
                 console.log([])
                 res.send([])
@@ -101,7 +100,6 @@ router.post('/answers', (req, res) => {
             answers.forEach((answer, index) => {
                 Questions.findById(answer.questionId)
                     .then(question => {
-                        // console.log(question.answer, answer.answer)
                         if(question.answer == answer.answer) {
                             correct += 10 + answer.remainingTime
                         }

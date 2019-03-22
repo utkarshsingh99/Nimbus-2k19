@@ -8,6 +8,9 @@ const teamSchema = new mongoose.Schema({
     logo: {
         type: String
     },
+    desc: {
+        type: String
+    },
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Events'
