@@ -11,7 +11,22 @@ const eventSchema = new mongoose.Schema({
     },
     date: {
         type: Date
-    }    
+    },
+    desc: {
+        type: String
+    },
+    prize: [{
+        position: Number,
+        prize: String
+    }],
+    venue: {
+        type: String
+    },
+    rules: [{
+        rule: {
+            type: String
+        }
+    }]    
 })
 
 const Events = mongoose.model('Events', eventSchema)
