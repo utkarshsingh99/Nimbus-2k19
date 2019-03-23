@@ -34,8 +34,8 @@ router.get('/', (req, res) => {
         })
 })
 
-router.get('/quizbyclub/:clubId', (req, res) => {
-    quiz.find({organizedBy: req.params.clubId})
+router.post('/quizbyclub/', (req, res) => {
+    quiz.find({organizedBy: req.body.clubId})
         .then(quizzes => {
             res.send(quizzes)
         })
