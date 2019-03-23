@@ -50,7 +50,7 @@ router.get('/questions', (req, res) => {
 router.post('/postquestions', (req, res) => {
     console.log(req.body)
     var doc = new Questions(req.body)
-    console.log(doc)
+    // console.log(doc)
     doc.save().then(doc => {
         res.send('OK')
     })
