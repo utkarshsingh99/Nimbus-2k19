@@ -46,12 +46,13 @@ app.post('/departments', (req, res) => {
         .then(team => {
             // Replace EventIDs with actual event details
             var noOfEvents = team.events.length
+            var counter = 0;
             team.events.forEach((eventId, index) => {
                 Events.findById(eventId)
                     .then(event => {
-                        console.log(event)
+                        counter++;
                         team.events[index] = event
-                        if (index === team.events.length - 1) {
+                        if (counter === noOfEvents) {
                             res.send(team)
                         }
                     })

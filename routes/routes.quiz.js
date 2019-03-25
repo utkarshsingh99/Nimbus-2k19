@@ -28,9 +28,13 @@ router.post('/postquiz', (req, res) => {
 })
 
 router.get('/', (req, res) => {
-    quiz.find({})
-        .then(quizzes => {
-            res.send(quizzes)
+    // quiz.find({})
+    //     .then(quizzes => {
+    //         res.send(quizzes)
+    //     })
+    quiz.findById("5c7ec33efb6fc072012e8aef")
+        .then(found => {
+            res.send([found])
         })
 })
 
@@ -104,37 +108,44 @@ router.post('/answers', (req, res) => {
     var answers = req.body.answers
     Users.findOne({authId: req.headers.token})
         .then(user => {
-            answers.forEach((answer, index) => {
-                Questions.findById(answer.questionId)
-                    .then(question => {
-                        if(question.answer == answer.answer) {
-                            correct += 10 + answer.remainingTime
-                        }
-                        counter++;
-                        console.log('counter:', counter)
-                        if(counter === 9) {
-                            quiz.findOne({_id: req.body.quizId})
-                                .then(foundQuiz => {
-                                    // Check if user exists in users array of quiz
-                                    var member = foundQuiz.users.find(member => member.rollNumber === user.rollNumber)
-                                    if(member === undefined) {
-                                        // User has not played quiz before
-                                        console.log('User not found in quiz array')
-                                        quiz.findOneAndUpdate({_id: question.quizId}, 
-                                                            {$push: 
-                                                                {users: {name: user.name, 
-                                                                        rollNumber: user.rollNumber, 
-                                                                        score: correct,
-                                                                        profilePicture : user.profilePicture}
-                                                                }
-                                                            }).then((quiz) => res.send({ correct }))
-                                    } else {
-                                        res.send('User has already played')
+            if(!user) {
+                res.send('User not found')
+            } else {
+                quiz.findOne({ _id: req.body.quizId })
+                .then(foundQuiz => {
+                    console.log(foundQuiz)
+                    console.log('Time Limit: ', foundQuiz.timeLimit)
+                    // Check if user exists in users array of quiz
+                    var member = foundQuiz.users.find(member => member.rollNumber === user.rollNumber)
+                    if (member) {
+                        res.send('User has already played')
+                    } else {
+                        answers.forEach((answer, index) => {
+                            Questions.findById(answer.questionId)
+                            .then(question => {
+                                if(question.answer == answer.answer) {
+                                    correct += 10 + (answer.remainingTime/foundQuiz.timeLimit)*10
+                                }
+                                counter++;
+                                console.log('counter:', counter)
+                                if(counter === 9) {                                    
+                                    // User has not played quiz before
+                                    console.log('User not found in quiz array')
+                                    correct = Math.round(correct)
+                                    quiz.findOneAndUpdate({_id: question.quizId}, 
+                                        {$push: 
+                                            {users: {name: user.name, 
+                                                rollNumber: user.rollNumber, 
+                                                score: correct,
+                                                profilePicture : user.profilePicture}
+                                            }
+                                        }).then((quiz) => res.send({ correct }))                        
                                     }
                                 })
+                            })
                         }
                     })
-            })
+                }
         })
 })
 

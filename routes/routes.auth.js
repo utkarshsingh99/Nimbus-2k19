@@ -20,7 +20,7 @@ router.post('/signup', (req, res) => {
             }
         }).catch(e => {
             console.log('Couldn\'t perform the findOne function')
-            res.send('Error: ', e)
+            res.send(e)
         })
 
 })
